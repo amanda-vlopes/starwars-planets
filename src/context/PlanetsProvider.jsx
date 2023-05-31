@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import PlanetsContext from './PlanetsContex';
 
 function PlanetsProvider({ children }) {
-  const [planets, setPlanets] = useState({});
+  const [planets, setPlanets] = useState([]);
   const [erro, setErro] = useState(null);
 
   const fetchPlanets = async () => {
@@ -24,9 +24,7 @@ function PlanetsProvider({ children }) {
     fetchPlanets();
   }, []);
 
-  const value = { planets, erro };
-
-  console.log(planets);
+  const value = { planets, setPlanets, erro };
 
   return (
     <PlanetsContext.Provider value={ value }>

@@ -4,27 +4,24 @@ import PlanetsContext from './PlanetsContex';
 
 function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
-  const [erro, setErro] = useState(null);
+  const [allPlanets, setAllPlanets] = useState([]);
 
   const fetchPlanets = async () => {
-    try {
-      const response = await fetch('https://swapi.dev/api/planets');
-      const data = await response.json();
-      const listPlanets = data.results.map((planet) => {
-        delete planet.residents;
-        return planet;
-      });
-      setPlanets(listPlanets);
-    } catch (error) {
-      setErro(error);
-    }
+    const response = await fetch('https://swapi.dev/api/planets');
+    const data = await response.json();
+    const listPlanets = data.results.map((planet) => {
+      delete planet.residents;
+      return planet;
+    });
+    setPlanets(listPlanets);
+    setAllPlanets(listPlanets);
   };
 
   useEffect(() => {
     fetchPlanets();
   }, []);
 
-  const value = { planets, setPlanets, erro };
+  const value = { planets, setPlanets, allPlanets, setAllPlanets };
 
   return (
     <PlanetsContext.Provider value={ value }>

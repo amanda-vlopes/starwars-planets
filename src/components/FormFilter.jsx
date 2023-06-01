@@ -29,17 +29,20 @@ function FormFilter() {
     setfilterByNumber([...filterByNumber, filterOptions]);
     const newOptions = typeOptions.filter((typeOption) => typeOption !== type);
     setTypeOptions(newOptions);
-    setfilterOptions({ ...filterOptions, type: newOptions[0] });
+    setfilterOptions({ ...filterOptions, type: newOptions[0], number: 0 });
   };
 
   const removeFilter = (index) => {
     const newFilterList = filterByNumber.toSpliced(index, 1);
     setfilterByNumber(newFilterList);
+    setTypeOptions(options);
+    setfilterOptions({ type: 'population', range: 'maior que', number: 0 });
   };
 
   const removeAllFilters = () => {
     setfilterByNumber([]);
     setTypeOptions(options);
+    setfilterOptions({ type: 'population', range: 'maior que', number: 0 });
   };
 
   const sortFilters = () => {

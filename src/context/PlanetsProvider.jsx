@@ -5,6 +5,7 @@ import PlanetsContext from './PlanetsContex';
 function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [allPlanets, setAllPlanets] = useState([]);
+  const [filterByNumber, setfilterByNumber] = useState([]);
 
   const fetchPlanets = async () => {
     const response = await fetch('https://swapi.dev/api/planets');
@@ -21,7 +22,14 @@ function PlanetsProvider({ children }) {
     fetchPlanets();
   }, []);
 
-  const value = { planets, setPlanets, allPlanets, setAllPlanets };
+  const value = {
+    planets,
+    setPlanets,
+    allPlanets,
+    setAllPlanets,
+    filterByNumber,
+    setfilterByNumber,
+  };
 
   return (
     <PlanetsContext.Provider value={ value }>

@@ -2,7 +2,8 @@ import { useContext, useState } from 'react';
 import PlanetsContext from '../context/PlanetsContex';
 
 function FormFilter() {
-  const { planets, allPlanets, setPlanets } = useContext(PlanetsContext);
+  const { allPlanets, setPlanets,
+    setfilterByNumber, filterByNumber } = useContext(PlanetsContext);
 
   const [filterOptions, setfilterOptions] = useState({
     type: 'population',
@@ -14,29 +15,30 @@ function FormFilter() {
     'diameter', 'rotation_period', 'surface_water'];
 
   const [typeOptions, setTypeOptions] = useState(options);
-  const [filterByNumber, setfilterByNumber] = useState([]);
 
   const { type, range, number } = filterOptions;
 
   const filterNames = (planetName) => {
-    const filterPlanets = allPlanets.filter(({ name }) => name.includes(planetName));
+    const filterPlanets = allPlanets
+      .filter(({ name }) => name.toLowerCase().includes(planetName.toLowerCase()));
     setPlanets(filterPlanets);
   };
 
   const filterSelection = () => {
-    console.log('cliquei');
-    const filteredPlanets = planets.filter((planet) => {
-      if (range === 'maior que') {
-        return Number(planet[type]) > Number(number);
-      } if (range === 'menor que') {
-        return Number(planet[type]) < Number(number);
-      }
-      return Number(planet[type]) === Number(number);
-    });
-    setPlanets(filteredPlanets);
-    setfilterByNumber([...filterByNumber, { type, range, number }]);
+    setfilterByNumber([...filterByNumber, filterOptions]);
     const newOptions = typeOptions.filter((typeOption) => typeOption !== type);
     setTypeOptions(newOptions);
+    setfilterOptions({ ...filterOptions, type: newOptions[0] });
+  };
+
+  const removeFilter = (index) => {
+    const newFilterList = filterByNumber.toSpliced(index, 1);
+    setfilterByNumber(newFilterList);
+  };
+
+  const removeAllFilters = () => {
+    setfilterByNumber([]);
+    setTypeOptions(options);
   };
 
   return (
@@ -81,6 +83,26 @@ function FormFilter() {
       />
 
       <button data-testid="button-filter" onClick={ filterSelection }>Filtrar</button>
+
+      <div>
+        {filterByNumber.map((op, index) => (
+          <div key={ index } data-testid="filter">
+            <p>{ `${op.type} ${op.range} ${op.number}` }</p>
+            <button
+              onClick={ () => removeFilter(index) }
+            >
+              delete
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <button
+        data-testid="button-remove-filters"
+        onClick={ removeAllFilters }
+      >
+        Remover Filtros
+      </button>
     </div>
   );
 }

@@ -39,88 +39,89 @@ describe('6 - Não utilize filtros repetidos', () => {
       expect(options).to.not.contain('population');
     });
   });
-});
-it('Filtre por diâmetro e o remove das opções', () => {
-  const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length);
+  it('Filtre por diâmetro e o remove das opções', () => {
+    const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
-    allColumnsOptions.forEach((option) => {
-      expect(options).to.contain(option);
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length);
+
+      allColumnsOptions.forEach((option) => {
+        expect(options).to.contain(option);
+      });
+    });
+
+    cy.addFilter('diameter', 'maior que', '12240');
+
+    cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_DIAMETER);
+
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length - 1);
+
+      expect(options).to.not.contain('diameter');
     });
   });
+  it('Filtre por período de rotação e o remove das opções', () => {
+    const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
-  cy.addFilter('diameter', 'maior que', '12240');
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length);
 
-  cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_DIAMETER);
+      allColumnsOptions.forEach((option) => {
+        expect(options).to.contain(option);
+      });
+    });
 
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length - 1);
+    cy.addFilter('rotation_period', 'maior que', '25');
 
-    expect(options).to.not.contain('diameter');
-  });
-});
-it('Filtre por período de rotação e o remove das opções', () => {
-  const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+    cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_ROTATION_PERIOD);
 
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length);
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length - 1);
 
-    allColumnsOptions.forEach((option) => {
-      expect(options).to.contain(option);
+      expect(options).to.not.contain('rotation_period');
     });
   });
+  it('Filtre por período de órbita e o remove das opções', () => {
+    const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
-  cy.addFilter('rotation_period', 'maior que', '25');
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length);
 
-  cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_ROTATION_PERIOD);
+      allColumnsOptions.forEach((option) => {
+        expect(options).to.contain(option);
+      });
+    });
 
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length - 1);
+    cy.addFilter('orbital_period', 'maior que', '350');
 
-    expect(options).to.not.contain('rotation_period');
-  });
-});
-it('Filtre por período de órbita e o remove das opções', () => {
-  const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+    cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_ORBITAL_PERIOD);
 
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length);
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length - 1);
 
-    allColumnsOptions.forEach((option) => {
-      expect(options).to.contain(option);
+      expect(options).to.not.contain('orbital_period');
     });
   });
+  it('Filtre por superfície aquática e o remove das opções', () => {
+    const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
-  cy.addFilter('orbital_period', 'maior que', '350');
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length);
 
-  cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_ORBITAL_PERIOD);
-
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length - 1);
-
-    expect(options).to.not.contain('orbital_period');
-  });
-});
-it('Filtre por superfície aquática e o remove das opções', () => {
-  const allColumnsOptions = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
-
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length);
-
-    allColumnsOptions.forEach((option) => {
-      expect(options).to.contain(option);
+      allColumnsOptions.forEach((option) => {
+        expect(options).to.contain(option);
+      });
     });
-  });
 
-  cy.addFilter('surface_water', 'maior que', '99');
+    cy.addFilter('surface_water', 'maior que', '99');
 
-  cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_SURFACE_WATER);
+    cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT_SURFACE_WATER);
 
-  cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
-    expect(options).to.have.length(allColumnsOptions.length - 1);
+    cy.getByTestId(COLUMN_FILTER).find('option').should((options) => {
+      expect(options).to.have.length(allColumnsOptions.length - 1);
 
-    expect(options).to.not.contain('surface_water');
+      expect(options).to.not.contain('surface_water');
+    });
   });
 });

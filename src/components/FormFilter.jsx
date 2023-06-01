@@ -4,13 +4,19 @@ import PlanetsContext from '../context/PlanetsContex';
 function FormFilter() {
   const { planets, allPlanets, setPlanets } = useContext(PlanetsContext);
 
-  const [filter, setFilter] = useState({
+  const [filterOptions, setfilterOptions] = useState({
     type: 'population',
     range: 'maior que',
     number: 0,
   });
 
-  const { type, range, number } = filter;
+  const options = ['population', 'orbital_period',
+    'diameter', 'rotation_period', 'surface_water'];
+
+  const [typeOptions, setTypeOptions] = useState(options);
+  const [filterByNumber, setfilterByNumber] = useState([]);
+
+  const { type, range, number } = filterOptions;
 
   const filterNames = (planetName) => {
     const filterPlanets = allPlanets.filter(({ name }) => name.includes(planetName));
@@ -18,6 +24,7 @@ function FormFilter() {
   };
 
   const filterSelection = () => {
+    console.log('cliquei');
     const filteredPlanets = planets.filter((planet) => {
       if (range === 'maior que') {
         return Number(planet[type]) > Number(number);
@@ -27,6 +34,9 @@ function FormFilter() {
       return Number(planet[type]) === Number(number);
     });
     setPlanets(filteredPlanets);
+    setfilterByNumber([...filterByNumber, { type, range, number }]);
+    const newOptions = typeOptions.filter((typeOption) => typeOption !== type);
+    setTypeOptions(newOptions);
   };
 
   return (
@@ -40,19 +50,21 @@ function FormFilter() {
       <select
         data-testid="column-filter"
         value={ type }
-        onChange={ ({ target }) => setFilter({ ...filter, type: target.value }) }
+        onChange={ ({ target }) => setfilterOptions(
+          { ...filterOptions, type: target.value },
+        ) }
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {typeOptions.map((typeOption, index) => (
+          <option value={ typeOption } key={ index }>{ typeOption }</option>
+        ))}
       </select>
 
       <select
         data-testid="comparison-filter"
         value={ range }
-        onChange={ ({ target }) => setFilter({ ...filter, range: target.value }) }
+        onChange={ ({ target }) => setfilterOptions(
+          { ...filterOptions, range: target.value },
+        ) }
       >
         <option value="maior que">maior que</option>
         <option value="menor que">menor que</option>
@@ -63,7 +75,9 @@ function FormFilter() {
         type="number"
         data-testid="value-filter"
         value={ number }
-        onChange={ ({ target }) => setFilter({ ...filter, number: target.value }) }
+        onChange={ ({ target }) => setfilterOptions(
+          { ...filterOptions, number: target.value },
+        ) }
       />
 
       <button data-testid="button-filter" onClick={ filterSelection }>Filtrar</button>

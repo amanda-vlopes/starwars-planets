@@ -2,21 +2,22 @@ import { useContext, useState } from 'react';
 import PlanetsContext from '../context/PlanetsContex';
 
 function FormFilter() {
-  const { allPlanets, setPlanets,
-    setfilterByNumber, filterByNumber } = useContext(PlanetsContext);
+  const { allPlanets, setPlanets, setfilterByNumber, filterByNumber,
+    setOrder } = useContext(PlanetsContext);
 
   const [filterOptions, setfilterOptions] = useState({
     type: 'population',
     range: 'maior que',
     number: 0,
   });
+  const { type, range, number } = filterOptions;
 
   const options = ['population', 'orbital_period',
     'diameter', 'rotation_period', 'surface_water'];
-
   const [typeOptions, setTypeOptions] = useState(options);
 
-  const { type, range, number } = filterOptions;
+  const [sortOption, setSortOption] = useState('ASC');
+  const [columnOption, setColumnOption] = useState('population');
 
   const filterNames = (planetName) => {
     const filterPlanets = allPlanets
@@ -41,8 +42,12 @@ function FormFilter() {
     setTypeOptions(options);
   };
 
+  const sortFilters = () => {
+    setOrder({ column: columnOption, sort: sortOption });
+  };
+
   return (
-    <div>
+    <section>
       <input
         type="text"
         onChange={ ({ target }) => filterNames(target.value) }
@@ -97,13 +102,48 @@ function FormFilter() {
         ))}
       </div>
 
+      <select
+        data-testid="column-sort"
+        onChange={ ({ target }) => setColumnOption(target.value) }
+      >
+        {options.map((opt, index) => (
+          <option key={ index } value={ opt }>{opt}</option>
+        ))}
+      </select>
+
+      <label htmlFor="asc">
+        <input
+          id="asc"
+          type="radio"
+          name="sort"
+          value="ASC"
+          data-testid="column-sort-input-asc"
+          onChange={ ({ target }) => setSortOption(target.value) }
+        />
+        Ascendente
+      </label>
+
+      <label htmlFor="desc">
+        <input
+          id="desc"
+          type="radio"
+          name="sort"
+          value="DESC"
+          data-testid="column-sort-input-desc"
+          onChange={ ({ target }) => setSortOption(target.value) }
+        />
+        Descendente
+      </label>
+
+      <button data-testid="column-sort-button" onClick={ sortFilters }>Ordernar</button>
+
       <button
         data-testid="button-remove-filters"
         onClick={ removeAllFilters }
       >
         Remover Filtros
       </button>
-    </div>
+    </section>
   );
 }
 

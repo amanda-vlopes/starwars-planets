@@ -35,7 +35,7 @@ function FormFilter() {
   const removeFilter = (typeOpt) => {
     const newFilterList = filterByNumber.filter((opt) => opt.type !== typeOpt);
     setfilterByNumber(newFilterList);
-    setTypeOptions(options);
+    setTypeOptions([...typeOptions, typeOpt]);
     setfilterOptions({ type: 'population', range: 'maior que', number: 0 });
   };
 

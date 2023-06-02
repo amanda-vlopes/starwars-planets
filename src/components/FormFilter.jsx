@@ -32,8 +32,8 @@ function FormFilter() {
     setfilterOptions({ ...filterOptions, type: newOptions[0], number: 0 });
   };
 
-  const removeFilter = (index) => {
-    const newFilterList = filterByNumber.toSpliced(index, 1);
+  const removeFilter = (typeOpt) => {
+    const newFilterList = filterByNumber.filter((opt) => opt.type !== typeOpt);
     setfilterByNumber(newFilterList);
     setTypeOptions(options);
     setfilterOptions({ type: 'population', range: 'maior que', number: 0 });
@@ -97,7 +97,7 @@ function FormFilter() {
           <div key={ index } data-testid="filter">
             <p>{ `${op.type} ${op.range} ${op.number}` }</p>
             <button
-              onClick={ () => removeFilter(index) }
+              onClick={ () => removeFilter(op.type) }
             >
               delete
             </button>
